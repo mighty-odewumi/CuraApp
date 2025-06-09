@@ -87,7 +87,7 @@ export default function HomePage() {
               pathname: '/transactions', 
               params: {type: 'income'}})
             }
-            className="bg-primary-500 rounded-xl py-4 items-center active:bg-primary-600"
+            className="bg-primary-500 rounded-xl py-4 mb-3 items-center active:bg-primary-600"
           >
             <Text className="text-white text-base font-semibold">
               + Add Income

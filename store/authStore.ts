@@ -1,3 +1,4 @@
+// src/store/authStore.ts (Updated)
 import { create } from 'zustand';
 import { supabase } from '@/lib/supabase';
 
@@ -30,8 +31,15 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     if (error) throw error;
     
+    // Extract user data correctly
+    const userData = {
+      id: data.user.id, // This is the correct user ID
+      email: data.user.email!,
+      full_name: data.user.user_metadata?.full_name || data.user.email!.split('@')[0],
+    };
+
     set({ 
-      user: data.user?.user_metadata as User,
+      user: userData,
       session: data.session
     });
   },
@@ -48,12 +56,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     });
 
     if (error) throw error;
-    
-    // Update state instead of returning data
-    set({ 
-      user: data.user?.user_metadata as User || null,
-      session: data.session
-    });
+    return data;
   },
 
   signOut: async () => {
@@ -62,20 +65,62 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   initialize: async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    
-    set({ 
-      user: session?.user?.user_metadata as User || null,
-      session,
-      loading: false 
-    });
+    try {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error) {
+        console.error('Error getting session:', error);
+        set({ loading: false });
+        return;
+      }
 
-    supabase.auth.onAuthStateChange((event, session) => {
-      set({ 
-        user: session?.user?.user_metadata as User || null,
-        session,
-        loading: false 
+      if (session?.user) {
+        const userData = {
+          id: session.user.id, // This is the correct user ID
+          email: session.user.email!,
+          full_name: session.user.user_metadata?.full_name || session.user.email!.split('@')[0],
+        };
+
+        set({ 
+          user: userData,
+          session,
+          loading: false 
+        });
+      } else {
+        set({ 
+          user: null,
+          session: null,
+          loading: false 
+        });
+      }
+
+      // Listen for auth changes
+      supabase.auth.onAuthStateChange((event, session) => {
+        console.log('Auth state changed:', event);
+        
+        if (session?.user) {
+          const userData = {
+            id: session.user.id,
+            email: session.user.email!,
+            full_name: session.user.user_metadata?.full_name || session.user.email!.split('@')[0],
+          };
+
+          set({ 
+            user: userData,
+            session,
+            loading: false 
+          });
+        } else {
+          set({ 
+            user: null,
+            session: null,
+            loading: false 
+          });
+        }
       });
-    });
+    } catch (error) {
+      console.error('Error initializing auth:', error);
+      set({ loading: false });
+    }
   },
 }));
