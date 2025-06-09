@@ -28,6 +28,7 @@ export default function HomePage() {
     if (user) {
       fetchFinancialData(user.id);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const renderEmptyState = () => (
@@ -108,7 +109,7 @@ export default function HomePage() {
             </Text>
             <Pressable onPress={() => router.push('/(tabs)/investments')}>
               <Text className="text-primary-500 text-sm font-medium">
-                View Details >
+                View Details 
               </Text>
             </Pressable>
           </View>
