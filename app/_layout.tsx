@@ -1,4 +1,4 @@
-import "@/global.css";
+import '@/global.css'; 
 import React, { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -21,10 +21,12 @@ export default function RootLayout() {
       <StatusBar style="auto" />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
-        <Stack.Screen name="onboarding" />
-        <Stack.Screen name="(auth)/login" />
-        <Stack.Screen name="(auth)/register" />
+        <Stack.Screen name="onboarding/index" />
+        <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="add-transaction" />
+        <Stack.Screen name="transaction/[id]" />
+        <Stack.Screen name="edit-transaction/[id]" />
       </Stack>
     </>
   );
