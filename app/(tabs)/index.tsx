@@ -83,7 +83,7 @@ export default function HomePage() {
         {/* Action Buttons */}
         <View className="px-5 mb-8 space-y-3">
           <Pressable
-            onPress={() => router.push('/add-transaction?type=income')}
+            onPress={() => router.push({pathname: '/add-transaction', params: {type: 'income'}})}
             className="bg-primary-500 rounded-xl py-4 items-center active:bg-primary-600"
           >
             <Text className="text-white text-base font-semibold">
@@ -92,7 +92,7 @@ export default function HomePage() {
           </Pressable>
           
           <Pressable
-            onPress={() => router.push('/add-transaction?type=expense')}
+            onPress={() => router.push({pathname: '/add-transaction', params: {type: 'expense'}})}
             className="border-2 border-primary-500 rounded-xl py-4 items-center active:bg-primary-50"
           >
             <Text className="text-primary-500 text-base font-semibold">
