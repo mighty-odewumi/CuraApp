@@ -33,7 +33,7 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       await signIn(data.email, data.password);
-      router.replace('/(tabs)');
+      router.replace('/(tabs)/index');
     } catch (error: any) {
       Alert.alert('Error', error.message);
     } finally {
