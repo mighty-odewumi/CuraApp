@@ -1,9 +1,20 @@
 import React from "react";
-import { ScrollView, View, Text, Image } from 'react-native';
+import { ScrollView, View, Text, Image, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useAuthStore } from "@/store/authStore";
 
 export default function ProfileScreen() {
+  const { signOut } = useAuthStore();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  }
+  
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView>
@@ -35,6 +46,13 @@ export default function ProfileScreen() {
             <Text className="ml-3 text-gray-700">Address: 123 Main St, City</Text>
           </View>
         </View>
+
+        <Pressable 
+          className="bg-[#4A55A2] p-4 rounded-lg m-4"
+          onPress={handleSignOut}
+        >
+          <Text>Sign Out</Text>
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );

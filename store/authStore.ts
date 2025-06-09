@@ -1,5 +1,6 @@
-// src/store/authStore.ts (Updated)
+// src/store/authStore.ts (Updated with better navigation handling)
 import { create } from 'zustand';
+import { router } from 'expo-router';
 import { supabase } from '@/lib/supabase';
 
 interface User {
@@ -18,7 +19,7 @@ interface AuthState {
   initialize: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   session: null,
   loading: true,
@@ -33,7 +34,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     
     // Extract user data correctly
     const userData = {
-      id: data.user.id, // This is the correct user ID
+      id: data.user.id,
       email: data.user.email!,
       full_name: data.user.user_metadata?.full_name || data.user.email!.split('@')[0],
     };
@@ -42,6 +43,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       user: userData,
       session: data.session
     });
+
+    // Don't navigate here - let the component handle it
   },
 
   signUp: async (email, password, fullName) => {
@@ -62,6 +65,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   signOut: async () => {
     await supabase.auth.signOut();
     set({ user: null, session: null });
+    // Navigate to login after logout
+    router.replace('/(auth)/login');
   },
 
   initialize: async () => {
@@ -76,7 +81,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       if (session?.user) {
         const userData = {
-          id: session.user.id, // This is the correct user ID
+          id: session.user.id,
           email: session.user.email!,
           full_name: session.user.user_metadata?.full_name || session.user.email!.split('@')[0],
         };
@@ -98,7 +103,15 @@ export const useAuthStore = create<AuthState>((set) => ({
       supabase.auth.onAuthStateChange((event, session) => {
         console.log('Auth state changed:', event);
         
-        if (session?.user) {
+        if (event === 'SIGNED_OUT') {
+          set({ 
+            user: null,
+            session: null,
+            loading: false 
+          });
+          // Navigate to login on sign out
+          router.replace('/(auth)/login');
+        } else if (session?.user) {
           const userData = {
             id: session.user.id,
             email: session.user.email!,
@@ -108,12 +121,6 @@ export const useAuthStore = create<AuthState>((set) => ({
           set({ 
             user: userData,
             session,
-            loading: false 
-          });
-        } else {
-          set({ 
-            user: null,
-            session: null,
             loading: false 
           });
         }
