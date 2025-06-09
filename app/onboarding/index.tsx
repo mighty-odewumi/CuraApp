@@ -88,7 +88,7 @@ export default function OnboardingScreen() {
             <Text className="text-gray-900 text-3xl text-center font-bold mb-6 leading-tight">
               {data.title}
             </Text>
-            <Text className="text-gray-600 text-base text-center leading-6">
+            <Text className="text-gray-600 text-lg text-center ">
               {data.subtitle}
             </Text>
           </View>
