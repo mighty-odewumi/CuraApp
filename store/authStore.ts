@@ -48,7 +48,12 @@ export const useAuthStore = create<AuthState>((set) => ({
     });
 
     if (error) throw error;
-    return data;
+    
+    // Update state instead of returning data
+    set({ 
+      user: data.user?.user_metadata as User || null,
+      session: data.session
+    });
   },
 
   signOut: async () => {
