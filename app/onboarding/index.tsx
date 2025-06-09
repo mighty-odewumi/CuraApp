@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PagerView from 'react-native-pager-view';
-import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
+import Animated, { FadeInRight } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
@@ -77,7 +77,7 @@ export default function OnboardingScreen() {
             <View className="w-70 h-70 bg-primary-50 rounded-full items-center justify-center">
               <Image 
                 source={data.image} 
-                className="w-48 h-48"
+                className="w-64 h-64"
                 resizeMode="contain"
               />
             </View>
@@ -85,10 +85,10 @@ export default function OnboardingScreen() {
 
           {/* Text Content */}
           <View className="px-5">
-            <Text className="text-gray-900 text-3xl font-bold mb-6 leading-tight">
+            <Text className="text-gray-900 text-3xl text-center font-bold mb-6 leading-tight">
               {data.title}
             </Text>
-            <Text className="text-gray-600 text-base leading-6">
+            <Text className="text-gray-600 text-base text-center leading-6">
               {data.subtitle}
             </Text>
           </View>
@@ -117,7 +117,7 @@ export default function OnboardingScreen() {
             {currentPage > 0 && (
               <Pressable
                 onPress={handlePrevious}
-                className="flex-1 border border-primary-500 rounded-xl py-4 items-center active:bg-primary-50"
+                className="flex-1 border border-primary-500 rounded-xl py-4 mr-2 items-center active:bg-primary-50"
               >
                 <Text className="text-primary-500 text-base font-semibold">
                   Previous

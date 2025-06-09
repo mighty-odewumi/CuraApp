@@ -26,15 +26,16 @@ export default function SplashScreen() {
   }));
 
   useEffect(() => {
-    progressWidth.value = withTiming(100, { duration: 2000 });
+    progressWidth.value = withTiming(100, { duration: 4000 });
     
     const timer = setTimeout(() => {
       opacity.value = withTiming(0, { duration: 300 }, () => {
         runOnJS(navigateNext)();
       });
-    }, 2000);
+    }, 4000);
 
     return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const navigateNext = () => {
