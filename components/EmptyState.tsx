@@ -34,9 +34,9 @@ export function EmptyState({
       {actionText && onAction && (
         <Pressable
           onPress={onAction}
-          className="bg-primary-500 rounded-xl px-8 py-4 active:bg-primary-600"
+          className="bg-primary-500 rounded-xl px-6 py-4 min-w-[200px] active:bg-primary-600"
         >
-          <Text className="text-white text-base font-semibold">
+          <Text className="text-white text-base font-semibold text-center">
             {actionText}
           </Text>
         </Pressable>

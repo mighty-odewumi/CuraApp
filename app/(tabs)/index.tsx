@@ -36,7 +36,7 @@ export default function HomePage() {
       icon="wallet-outline"
       title="Welcome to Cura!"
       subtitle="Start tracking your financial journey by adding your first transaction."
-      actionText="Add Your First Transaction"
+      actionText="Add a Transaction"
       onAction={() => router.push('/add-transaction')}
     />
   );
@@ -56,7 +56,7 @@ export default function HomePage() {
         </View>
 
         {/* Financial Summary Cards */}
-        <View className="flex-row px-5 mb-6 space-x-2">
+        <View className="flex-row px-5 mb-6 space-x-2 gap-3">
           <FinancialSummaryCard
             title="Income"
             amount={totalIncome}
@@ -83,8 +83,11 @@ export default function HomePage() {
         {/* Action Buttons */}
         <View className="px-5 mb-8 space-y-3">
           <Pressable
-            onPress={() => router.push('/add-transaction?type=income')}
-            className="bg-primary-500 rounded-xl py-4 items-center active:bg-primary-600"
+            onPress={() => router.push({
+              pathname: '/transactions', 
+              params: {type: 'income'}})
+            }
+            className="bg-primary-500 rounded-xl py-4 mb-3 items-center active:bg-primary-600"
           >
             <Text className="text-white text-base font-semibold">
               + Add Income
@@ -92,7 +95,10 @@ export default function HomePage() {
           </Pressable>
           
           <Pressable
-            onPress={() => router.push('/add-transaction?type=expense')}
+            onPress={() => router.push({
+              pathname: '/add-transaction', 
+              params: {type: 'expense'}})
+            }
             className="border-2 border-primary-500 rounded-xl py-4 items-center active:bg-primary-50"
           >
             <Text className="text-primary-500 text-base font-semibold">

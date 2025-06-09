@@ -1,4 +1,6 @@
+// src/store/authStore.ts (Updated with better navigation handling)
 import { create } from 'zustand';
+import { router } from 'expo-router';
 import { supabase } from '@/lib/supabase';
 
 interface User {
@@ -17,7 +19,7 @@ interface AuthState {
   initialize: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   session: null,
   loading: true,
@@ -30,10 +32,19 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     if (error) throw error;
     
+    // Extract user data correctly
+    const userData = {
+      id: data.user.id,
+      email: data.user.email!,
+      full_name: data.user.user_metadata?.full_name || data.user.email!.split('@')[0],
+    };
+
     set({ 
-      user: data.user?.user_metadata as User,
+      user: userData,
       session: data.session
     });
+
+    // Don't navigate here - let the component handle it
   },
 
   signUp: async (email, password, fullName) => {
@@ -48,34 +59,75 @@ export const useAuthStore = create<AuthState>((set) => ({
     });
 
     if (error) throw error;
-    
-    // Update state instead of returning data
-    set({ 
-      user: data.user?.user_metadata as User || null,
-      session: data.session
-    });
+    return data;
   },
 
   signOut: async () => {
     await supabase.auth.signOut();
     set({ user: null, session: null });
+    // Navigate to login after logout
+    router.replace('/(auth)/login');
   },
 
   initialize: async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    
-    set({ 
-      user: session?.user?.user_metadata as User || null,
-      session,
-      loading: false 
-    });
+    try {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error) {
+        console.error('Error getting session:', error);
+        set({ loading: false });
+        return;
+      }
 
-    supabase.auth.onAuthStateChange((event, session) => {
-      set({ 
-        user: session?.user?.user_metadata as User || null,
-        session,
-        loading: false 
+      if (session?.user) {
+        const userData = {
+          id: session.user.id,
+          email: session.user.email!,
+          full_name: session.user.user_metadata?.full_name || session.user.email!.split('@')[0],
+        };
+
+        set({ 
+          user: userData,
+          session,
+          loading: false 
+        });
+      } else {
+        set({ 
+          user: null,
+          session: null,
+          loading: false 
+        });
+      }
+
+      // Listen for auth changes
+      supabase.auth.onAuthStateChange((event, session) => {
+        console.log('Auth state changed:', event);
+        
+        if (event === 'SIGNED_OUT') {
+          set({ 
+            user: null,
+            session: null,
+            loading: false 
+          });
+          // Navigate to login on sign out
+          router.replace('/(auth)/login');
+        } else if (session?.user) {
+          const userData = {
+            id: session.user.id,
+            email: session.user.email!,
+            full_name: session.user.user_metadata?.full_name || session.user.email!.split('@')[0],
+          };
+
+          set({ 
+            user: userData,
+            session,
+            loading: false 
+          });
+        }
       });
-    });
+    } catch (error) {
+      console.error('Error initializing auth:', error);
+      set({ loading: false });
+    }
   },
 }));
