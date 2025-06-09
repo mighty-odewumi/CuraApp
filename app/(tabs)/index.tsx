@@ -56,7 +56,7 @@ export default function HomePage() {
         </View>
 
         {/* Financial Summary Cards */}
-        <View className="flex-row px-5 mb-6 space-x-2">
+        <View className="flex-row px-5 mb-6 space-x-2 gap-3">
           <FinancialSummaryCard
             title="Income"
             amount={totalIncome}
