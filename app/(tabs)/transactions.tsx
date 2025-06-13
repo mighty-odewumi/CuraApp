@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, Pressable, RefreshControl } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/authStore';
 import { useFinanceStore } from '@/store/financeStore';
@@ -13,27 +13,49 @@ export default function TransactionsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [filter, setFilter] = useState<'all' | 'income' | 'expense'>('all');
   const { user } = useAuthStore();
-  const { recentTransactions, fetchFinancialData, loading, hasData } = useFinanceStore();
+  const { allTransactions, fetchFinancialData, loading, hasData } = useFinanceStore();
 
-  useEffect(() => {
-    if (user) {
-      fetchFinancialData(user.id);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  // Use useFocusEffect instead of useEffect for better navigation handling
+  useFocusEffect(
+    useCallback(() => {
+      if (user?.id) {
+        fetchFinancialData(user.id);
+      }
+    }, [user?.id])
+  );
 
   const onRefresh = async () => {
     if (user) {
       setRefreshing(true);
-      await fetchFinancialData(user.id);
-      setRefreshing(false);
+      try {
+        await fetchFinancialData(user.id);
+      } catch (error) {
+        console.error('Error refreshing:', error);
+      } finally {
+        setRefreshing(false);
+      }
     }
   };
 
-  const filteredTransactions = recentTransactions.filter(transaction => {
+  const filteredTransactions = allTransactions.filter(transaction => {
     if (filter === 'all') return true;
     return transaction.type === filter;
   });
+
+  const handleFilterChange = (newFilter: 'all' | 'income' | 'expense') => {
+    console.log('Changing filter to:', newFilter);
+    setFilter(newFilter);
+  };
+
+  const handleTransactionPress = (transactionId: string) => {
+    console.log('Navigating to transaction:', transactionId);
+    router.push(`/transaction/${transactionId}`);
+  };
+
+  const handleAddTransaction = () => {
+    console.log('Navigating to add transaction');
+    router.push('/add-transaction');
+  };
 
   const renderEmptyState = () => (
     <EmptyState
@@ -41,9 +63,19 @@ export default function TransactionsScreen() {
       title="No Transactions Yet"
       subtitle="Start tracking your financial journey by adding your first transaction."
       actionText="Add Transaction"
-      onAction={() => router.push('/add-transaction')}
+      onAction={handleAddTransaction}
     />
   );
+
+  if (!user) {
+    return (
+      <SafeAreaView className="flex-1 bg-white">
+        <View className="flex-1 justify-center items-center">
+          <Text className="text-gray-500">Please log in to view transactions</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <>
@@ -52,7 +84,7 @@ export default function TransactionsScreen() {
         {/* Header */}
         <View className="flex-row items-center justify-between px-5 py-4 border-b border-gray-100">
           <Text className="text-xl font-bold text-gray-900">Transactions</Text>
-          <Pressable onPress={() => router.push('/add-transaction')}>
+          <Pressable onPress={handleAddTransaction}>
             <Ionicons name="add-circle" size={28} color="#1877F2" />
           </Pressable>
         </View>
@@ -70,7 +102,7 @@ export default function TransactionsScreen() {
               ].map((tab) => (
                 <Pressable
                   key={tab.key}
-                  onPress={() => setFilter(tab.key as any)}
+                  onPress={() => handleFilterChange(tab.key as any)}
                   className={`flex-1 py-2 rounded-lg items-center ${
                     filter === tab.key ? 'bg-white shadow-sm' : ''
                   }`}
@@ -98,7 +130,7 @@ export default function TransactionsScreen() {
                     <TransactionItem
                       key={transaction.id}
                       transaction={transaction}
-                      onPress={() => router.push(`/transaction/${transaction.id}` as any)}
+                      onPress={() => handleTransactionPress(transaction.id)}
                     />
                   ))}
                 </View>
