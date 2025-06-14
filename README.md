@@ -138,7 +138,7 @@ Cura is a comprehensive financial management mobile application built with React
 | **Animations** | React Native Reanimated | Smooth, performant animations |
 
 ## 🔧 Installation & Setup
-Download the APK Build [here](https://drive.google.com/file/d/16sqI_2ZTdnNMrC0Qc9u8Rvxi0m9lFSbK/view?usp=drive_link) (for Android devices)
+Download the APK Build [here](https://drive.google.com/file/d/16sqI_2ZTdnNMrC0Qc9u8Rvxi0m9lFSbK/view?usp=sharing) (for Android devices)
 
 ## 📱 Demo Access
 
@@ -180,6 +180,7 @@ Create a `.env` file in the root directory:
 EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
 EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
+Note: We hardcoded our Supabase secrets because it is Row Level protected and encouraged by the Official Expo docs.
 
 ## 📊 Database Schema
 
