@@ -138,7 +138,7 @@ Cura is a comprehensive financial management mobile application built with React
 | **Animations** | React Native Reanimated | Smooth, performant animations |
 
 ## 🔧 Installation & Setup
-Download the APK Build here (for Android devices)
+Download the APK Build [here](https://drive.google.com/drive/folders/16NlmG-_B81tD7uzZ6Bf0Ro2uXjzIOwpF?usp=drive_link) (for Android devices)
 
 ## 📱 Demo Access
 
