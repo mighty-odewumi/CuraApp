@@ -132,39 +132,6 @@ export default function InvestmentsScreen() {
     }
   };
 
-  // const renderProgressSection = () => (
-  //   <View className="mx-5 mb-6">
-  //     <View className="bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl p-5">
-  //       <Text className="text-white text-lg font-semibold mb-2">
-  //         Investment Progress
-  //       </Text>
-  //       <View className="flex-row items-center justify-between">
-  //         <View>
-  //           <Text className="text-white/80 text-sm">
-  //             {canInvest ? 'Ready to Invest!' : 'Keep Saving to Unlock'}
-  //           </Text>
-  //           <Text className="text-white text-2xl font-bold">
-  //             {investmentProgress.percentage.toFixed(0)}%
-  //           </Text>
-  //         </View>
-  //         <View className="items-end">
-  //           <Text className="text-white/80 text-sm">Virtual Balance</Text>
-  //           <Text className="text-white text-xl font-bold">
-  //             ₦{virtualBalance.toLocaleString()}
-  //           </Text>
-  //         </View>
-  //       </View>
-        
-  //       <View className="mt-4 bg-white/20 rounded-full h-2">
-  //         <View 
-  //           className="bg-white rounded-full h-2"
-  //           style={{ width: `${Math.min(investmentProgress.percentage, 100)}%` }}
-  //         />
-  //       </View>
-  //     </View>
-  //   </View>
-  // );
-
   const renderProgressSection = () => (
     <View className="mx-5 mb-6">
       <LinearGradient
