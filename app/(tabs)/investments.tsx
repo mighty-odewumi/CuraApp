@@ -12,7 +12,6 @@ import { EducationalPopups } from '@/components/EducationalPopups';
 import { EmptyState } from '@/components/EmptyState';
 import { LinearGradient } from 'expo-linear-gradient';
 
-
 export default function InvestmentsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [showEducationalTips, setShowEducationalTips] = useState(false);
