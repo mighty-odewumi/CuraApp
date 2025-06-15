@@ -72,6 +72,8 @@ Cura is a comprehensive financial management mobile application built with React
 - **Progress Visualization**: Circular progress indicators and achievement tracking
 - **Educational Components**: Investment tips and financial literacy content
 
+Video Demo Link: https://drive.google.com/drive/folders/16GMMv4FWu7XiMsgYsXRfGnsLJLRuyWGT?usp=sharing
+
 ## 🚀 Technical Excellence
 
 ### **Architecture & State Management**
