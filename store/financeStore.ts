@@ -1,4 +1,3 @@
-// src/store/financeStore.ts (Updated with better error handling)
 import { create } from 'zustand';
 import { supabase } from '@/lib/supabase';
 
