@@ -1,4 +1,3 @@
-// src/store/authStore.ts (Updated with better navigation handling)
 import { create } from 'zustand';
 import { router } from 'expo-router';
 import { supabase } from '@/lib/supabase';
@@ -32,7 +31,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     if (error) throw error;
     
-    // Extract user data correctly
     const userData = {
       id: data.user.id,
       email: data.user.email!,
@@ -43,8 +41,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       user: userData,
       session: data.session
     });
-
-    // Don't navigate here - let the component handle it
   },
 
   signUp: async (email, password, fullName) => {
