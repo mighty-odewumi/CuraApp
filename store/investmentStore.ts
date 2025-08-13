@@ -1,4 +1,3 @@
-// src/store/investmentStore.ts
 import { create } from 'zustand';
 import { stocksApi, Stock } from '@/lib/stocksApi';
 import { supabase } from '@/lib/supabase';
