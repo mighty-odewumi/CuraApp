@@ -34,6 +34,7 @@ export default function InvestmentsScreen() {
     canInvest,
     fetchStocks,
     fetchPortfolio,
+    
     updateVirtualBalance,
     setCanInvest,
     buyStock,
@@ -47,7 +48,7 @@ export default function InvestmentsScreen() {
   const safeInvestmentProgress = investmentProgress?.percentage || 0
   const safeWeeklyProfit = typeof weeklyProfit === "number" ? weeklyProfit : 0
 
-  // Check if user can invest (100% progress or judge credentials)
+  // Check if user can invest (100% progress)
   useEffect(() => {
     const judgeEmail = process.env.EXPO_PUBLIC_JUDGE_EMAIL
     const isJudge = user?.email === judgeEmail
