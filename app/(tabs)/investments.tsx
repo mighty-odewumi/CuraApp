@@ -40,7 +40,6 @@ export default function InvestmentsScreen() {
     buyStock,
   } = useInvestmentStore()
 
-  // Safe number parsing with fallbacks
   const safeVirtualBalance = typeof virtualBalance === "number" ? virtualBalance : 0
   const safeTotalProfit = typeof totalProfit === "number" ? totalProfit : 0
   const safeTotalCurrentValue = typeof totalCurrentValue === "number" ? totalCurrentValue : 0
@@ -48,7 +47,6 @@ export default function InvestmentsScreen() {
   const safeInvestmentProgress = investmentProgress?.percentage || 0
   const safeWeeklyProfit = typeof weeklyProfit === "number" ? weeklyProfit : 0
 
-  // Check if user can invest (100% progress)
   useEffect(() => {
     const judgeEmail = process.env.EXPO_PUBLIC_JUDGE_EMAIL
     const isJudge = user?.email === judgeEmail
@@ -56,14 +54,12 @@ export default function InvestmentsScreen() {
 
     setCanInvest(isJudge || hasFullProgress)
 
-    // Set virtual balance to weekly profit
     if (safeWeeklyProfit > 0) {
       updateVirtualBalance(safeWeeklyProfit)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, safeInvestmentProgress, safeWeeklyProfit])
 
-  // Show educational tips after 4 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowEducationalTips(true)
@@ -72,7 +68,6 @@ export default function InvestmentsScreen() {
     return () => clearTimeout(timer)
   }, [])
 
-  // Fetch data when screen is focused
   useFocusEffect(
     useCallback(() => {
       fetchStocks()
@@ -114,7 +109,7 @@ export default function InvestmentsScreen() {
   const handleBuyStock = async () => {
     if (!user?.id || !selectedStock) return
 
-    const shares = Number.parseInt(shareQuantity)
+    const shares = Number.parseInt(shareQuantity, 10)
     if (isNaN(shares) || shares <= 0) {
       Alert.alert("Invalid Quantity", "Please enter a valid number of shares")
       return
@@ -355,7 +350,6 @@ export default function InvestmentsScreen() {
     <>
       <StatusBar style="dark" />
       <SafeAreaView className="flex-1 bg-gray-50">
-        {/* Header */}
         <View className="flex-row items-center justify-between px-5 py-4 bg-white border-b border-gray-100">
           <Text className="text-xl font-bold text-gray-900">Invest</Text>
           <Pressable onPress={handleRefresh} disabled={loading}>
