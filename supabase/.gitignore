@@ -1,0 +1,13 @@
+# Supabase
+.branches
+.temp
+
+# dotenvx
+.env.keys
+.env.local
+.env.*.local
+
+# SQL
+data.SQL
+full_dump.sql
+*.sql 
